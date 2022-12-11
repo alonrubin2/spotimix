@@ -8,12 +8,9 @@ export default async function handler(req, res) {
     //   country: "US",
     //   limit: 50,
     // });
-    const categories = await spotifyAPI.getAvailableGenreSeeds();
-    console.log(
-      "🚀 ~ file: getCategories.js:9 ~ handler ~ categories",
-      categories
-    );
-    return res.send(categories);
+    const genres = await spotifyAPI.getAvailableGenreSeeds();
+    console.log("🚀 ~ file: getCategories.js:9 ~ handler ~ genres", genres);
+    return res.send(genres);
   } catch (e) {
     console.error("I AM ERROR ##########", e);
   }

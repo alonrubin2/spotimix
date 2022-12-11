@@ -4,7 +4,8 @@ const index = () => {
   const [token, setToken] = useState("");
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedCategories] = useState([]);
-  console.log("🚀 ~ file: index.js:7 ~ index ~ selectedGenres", selectedGenres);
+  const [songs, setSongs] = useState([]);
+  console.log("🚀 ~ file: index.js:8 ~ index ~ songs", songs);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -15,7 +16,7 @@ const index = () => {
 
   const getCategories = async (token) => {
     const body = { token };
-    const genres = await fetch("/api/categories/getCategories", {
+    const genres = await fetch("/api/genres/getGenres", {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -23,12 +24,9 @@ const index = () => {
       },
     });
 
-    const parsedCategories = await genres.json();
-    console.log(
-      "🚀 ~ file: index.js:30 ~ getCategories ~ parsedCategories",
-      parsedCategories
-    );
-    setGenres(parsedCategories.body.genres);
+    const parsedGenres = await genres.json();
+
+    setGenres(parsedGenres.body.genres);
   };
 
   useEffect(() => {
@@ -36,6 +34,9 @@ const index = () => {
   }, []);
 
   const selectCategory = (e) => {
+    if (selectedGenres.length >= 5) {
+      return;
+    }
     if (selectedGenres.includes(e.target.value)) {
       const index = selectedGenres.indexOf(e.target.value);
       const modifiedSelectedCategories = [...selectedGenres];
@@ -44,6 +45,23 @@ const index = () => {
       return;
     }
     setSelectedCategories([...selectedGenres, e.target.value]);
+  };
+
+  const getSongs = async () => {
+    if (selectedGenres.length === 0) {
+      alert("Please selected at least 1 genre");
+      return;
+    }
+    const body = { token, selectedGenres };
+    const songs = await fetch("/api/songs/getSongs", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const parsedSongs = await songs.json();
+    setSongs(parsedSongs.body.tracks);
   };
 
   return (
@@ -69,6 +87,18 @@ const index = () => {
           </select>
         </div>
       )}
+
+      <button
+        onClick={() => {
+          getSongs();
+        }}>
+        get songs
+      </button>
+
+      {songs.length > 0 &&
+        songs.map((song) => {
+          return <div key={song.id}>{song.name}</div>;
+        })}
     </div>
   );
 };
