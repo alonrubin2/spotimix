@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 
 const index = () => {
   const [token, setToken] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedCategories] = useState([]);
+  console.log("🚀 ~ file: index.js:7 ~ index ~ selectedGenres", selectedGenres);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -14,7 +15,7 @@ const index = () => {
 
   const getCategories = async (token) => {
     const body = { token };
-    const categories = await fetch("/api/categories/getCategories", {
+    const genres = await fetch("/api/categories/getCategories", {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -22,8 +23,12 @@ const index = () => {
       },
     });
 
-    const parsedCategories = await categories.json();
-    setCategories(parsedCategories.body.categories.items);
+    const parsedCategories = await genres.json();
+    console.log(
+      "🚀 ~ file: index.js:30 ~ getCategories ~ parsedCategories",
+      parsedCategories
+    );
+    setGenres(parsedCategories.body.genres);
   };
 
   useEffect(() => {
@@ -31,36 +36,33 @@ const index = () => {
   }, []);
 
   const selectCategory = (e) => {
-    if (selectedCategories.includes(e.target.value)) {
-      const index = selectedCategories.indexOf(e.target.value);
-      const modifiedSelectedCategories = [...selectedCategories];
+    if (selectedGenres.includes(e.target.value)) {
+      const index = selectedGenres.indexOf(e.target.value);
+      const modifiedSelectedCategories = [...selectedGenres];
       modifiedSelectedCategories.splice(index, 1);
       setSelectedCategories(modifiedSelectedCategories);
       return;
     }
-    setSelectedCategories([...selectedCategories, e.target.value]);
+    setSelectedCategories([...selectedGenres, e.target.value]);
   };
 
   return (
     <div>
-      {categories.length > 0 && (
+      {genres.length > 0 && (
         <div className="select">
-          <label className="select--label" htmlFor="song1categories">
+          <label className="select--label" htmlFor="genres">
             Choose A Category for first song:
           </label>
           <select
             onChange={selectCategory}
-            value={selectedCategories}
-            name="song1categories"
+            value={selectedGenres}
+            name="genres"
             className="select--dropdown"
             multiple>
-            {categories.map((category) => {
+            {genres.map((genre) => {
               return (
-                <option
-                  className="select--option"
-                  key={category.id}
-                  value={category.id}>
-                  {category.name}
+                <option className="select--option" key={genre} value={genre}>
+                  {genre}
                 </option>
               );
             })}
