@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import SongCard from "../components/SongCard";
 
 const index = () => {
   const [token, setToken] = useState("");
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedCategories] = useState([]);
   const [songs, setSongs] = useState([]);
-  console.log("🚀 ~ file: index.js:8 ~ index ~ songs", songs);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -97,7 +97,7 @@ const index = () => {
 
       {songs.length > 0 &&
         songs.map((song) => {
-          return <div key={song.id}>{song.name}</div>;
+          return <SongCard song={song} />;
         })}
     </div>
   );
