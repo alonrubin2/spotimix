@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const index = () => {
   const [token, setToken] = useState("");
   const [categories, setCategories] = useState([]);
-  console.log("🚀 ~ file: index.js:6 ~ index ~ categories", categories);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -30,23 +30,42 @@ const index = () => {
     getAuth();
   }, []);
 
+  const selectCategory = (e) => {
+    if (selectedCategories.includes(e.target.value)) {
+      const index = selectedCategories.indexOf(e.target.value);
+      const modifiedSelectedCategories = [...selectedCategories];
+      modifiedSelectedCategories.splice(index, 1);
+      setSelectedCategories(modifiedSelectedCategories);
+      return;
+    }
+    setSelectedCategories([...selectedCategories, e.target.value]);
+  };
+
   return (
     <div>
-      <button
-        onClick={async () => {
-          await getCategories();
-        }}>
-        get dem categories
-      </button>
       {categories.length > 0 && (
-        <>
-          <select name="categories">
-            <option value={""}>Choose A Category</option>
+        <div className="select">
+          <label className="select--label" htmlFor="song1categories">
+            Choose A Category for first song:
+          </label>
+          <select
+            onChange={selectCategory}
+            value={selectedCategories}
+            name="song1categories"
+            className="select--dropdown"
+            multiple>
             {categories.map((category) => {
-              return <option value={category.name}>{category.name}</option>;
+              return (
+                <option
+                  className="select--option"
+                  key={category.id}
+                  value={category.id}>
+                  {category.name}
+                </option>
+              );
             })}
           </select>
-        </>
+        </div>
       )}
     </div>
   );

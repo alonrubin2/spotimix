@@ -4,7 +4,10 @@ export default async function handler(req, res) {
   const spotifyAPI = new Spotify();
   spotifyAPI.setAccessToken(req.body.token);
   try {
-    const categories = await spotifyAPI.getCategories({ country: "US" });
+    const categories = await spotifyAPI.getCategories({
+      country: "US",
+      limit: 50,
+    });
     console.log(
       "🚀 ~ file: getCategories.js:9 ~ handler ~ categories",
       categories
