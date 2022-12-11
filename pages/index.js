@@ -1,16 +1,10 @@
 import { useState, useEffect } from "react";
 
 const index = () => {
-  //   useEffect(() => {
-  //     (async () => {
-  //       const auth = await fetch("/api/auth/getToken");
-  //       console.log("🚀 ~ file: index.js:7 ~ auth", auth);
-  //     })();
-  //   }, []);
-
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
-    console.log("🚀 ~ file: index.js:7 ~ auth", auth);
+    const parsedAuth = await auth.json();
+    console.log("🚀 ~ file: index.js:7 ~ getAuth ~ parsedAuth", parsedAuth);
   };
 
   const getCategories = async () => {

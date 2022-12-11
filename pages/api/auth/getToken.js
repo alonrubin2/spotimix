@@ -15,8 +15,7 @@ export default async function handler(req, res) {
       json: true,
     });
     const parsedAuth = await auth.json();
-    console.log("🚀 ~ file: getToken.js:21 ~ handler ~ parsedAuth", parsedAuth);
-    return parsedAuth;
+    return res.send(parsedAuth);
   } catch (e) {
     console.error("I AM ERROR ##########", e);
     return e;
