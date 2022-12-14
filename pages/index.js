@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Spotify from "react-spotify-embed";
-import SongCard from "../components/SongCard";
+import { getAuth } from "../utils/authUtils";
+import { getGenres, getSongs } from "../utils/getUtils";
 
 const index = () => {
   const [token, setToken] = useState("");
@@ -9,32 +10,14 @@ const index = () => {
   const [songs, setSongs] = useState([]);
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
-  console.log("🚀 ~ file: index.js:11 ~ index ~ song2", song2);
-
-  const getAuth = async () => {
-    const auth = await fetch("/api/auth/getToken");
-    const { access_token } = await auth.json();
-    setToken(access_token);
-    getCategories(access_token);
-  };
-
-  const getCategories = async (token) => {
-    const body = { token };
-    const genres = await fetch("/api/genres/getGenres", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const parsedGenres = await genres.json();
-
-    setGenres(parsedGenres.body.genres);
-  };
 
   useEffect(() => {
-    getAuth();
+    (async () => {
+      const token = await getAuth();
+      setToken(token);
+      const genres = await getGenres(token);
+      setGenres(genres);
+    })();
   }, []);
 
   const selectCategory = (e) => {
@@ -51,27 +34,9 @@ const index = () => {
     setSelectedCategories([...selectedGenres, e.target.value]);
   };
 
-  const getSongs = async () => {
-    if (selectedGenres.length === 0) {
-      alert("Please selected at least 1 genre");
-      return;
-    }
-    const body = { token, selectedGenres };
-    const songs = await fetch("/api/songs/getSongs", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const parsedSongs = await songs.json();
-    setSongs(parsedSongs);
-  };
-
   const pick2Songs = () => {
     const song1Random = Math.floor(Math.random() * songs.length);
     const song2Random = Math.floor(Math.random() * songs.length);
-
     setSong1(songs[song1Random]);
     setSong2(songs[song2Random]);
   };
@@ -106,7 +71,7 @@ const index = () => {
 
       <button
         onClick={() => {
-          getSongs();
+          getSongs(selectedGenres, token, setSongs);
         }}>
         get songs
       </button>
@@ -116,27 +81,21 @@ const index = () => {
         }}>
         reshuffle
       </button>
-      {/* <button
-        onClick={() => {
-          getSong2(song2);
-        }}>
-        get song 2
-      </button> */}
+
       <div className="songs-container">
         {song1 && (
           <div className="song">
-            <h2>Sing this Song:</h2>
-            <SongCard song={song1} />
-          </div>
-        )}
-        {song2 && (
-          <div className="song">
-            <h2>Over this Song's music:</h2>
-            <SongCard song={song2} />
+            <h2>Sing this Song</h2>
+            <Spotify link={song1.external_urls.spotify} />
           </div>
         )}
 
-        {song2 && <Spotify link={song2.external_urls.spotify} />}
+        {song2 && (
+          <div className="song">
+            <h2>Over this Song's music</h2>
+            <Spotify link={song2.external_urls.spotify} />
+          </div>
+        )}
       </div>
     </div>
   );
