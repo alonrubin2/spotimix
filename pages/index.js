@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import Spotify from "react-spotify-embed";
 import { getAuth } from "../utils/authUtils";
-import { getGenres, getSongs } from "../utils/getUtils";
+import { getSongs } from "../utils/getUtils";
+import { genres } from "./../utils/genres";
 
 const index = () => {
   const [token, setToken] = useState("");
-  const [genres, setGenres] = useState([]);
+  const genresArray = genres;
   const [selectedGenres, setSelectedCategories] = useState([]);
+
   const [songs, setSongs] = useState([]);
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
@@ -15,8 +17,6 @@ const index = () => {
     (async () => {
       const token = await getAuth();
       setToken(token);
-      const genres = await getGenres(token);
-      setGenres(genres);
     })();
   }, []);
 
@@ -58,7 +58,7 @@ const index = () => {
             name="genres"
             className="select--dropdown"
             multiple>
-            {genres.map((genre) => {
+            {genresArray.map((genre) => {
               return (
                 <option className="select--option" key={genre} value={genre}>
                   {genre}
