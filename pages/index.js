@@ -5,16 +5,10 @@ import { getSongs } from "../utils/getUtils";
 import { genres } from "./../utils/genres";
 
 const index = () => {
-  const [token, setToken] = useState("");
   const genresArray = genres;
+  const [token, setToken] = useState("");
   const [selectedGenres, setSelectedGenres] = useState([]);
-  console.log(
-    "🚀 ~ file: index.js:11 ~ index ~ selectedGenres",
-    selectedGenres
-  );
-
   const [songs, setSongs] = useState([]);
-  console.log("🚀 ~ file: index.js:17 ~ index ~ songs", songs);
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
 
@@ -91,14 +85,14 @@ const index = () => {
         {song1 && (
           <div className="song">
             <h2>Sing this Song</h2>
-            <Spotify link={song1.external_urls.spotify} />
+            <Spotify link={song1.external_urls.spotify} id={"song1"} />
           </div>
         )}
 
         {song2 && (
           <div className="song">
             <h2>Over this Song's music</h2>
-            <Spotify link={song2.external_urls.spotify} />
+            <Spotify link={song2.external_urls.spotify} id={"song2"} />
           </div>
         )}
       </div>
