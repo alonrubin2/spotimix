@@ -6,6 +6,8 @@ const index = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedCategories] = useState([]);
   const [songs, setSongs] = useState([]);
+  const [song1, setSong1] = useState(null);
+  const [song2, setSong2] = useState(null);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -64,6 +66,18 @@ const index = () => {
     setSongs(parsedSongs);
   };
 
+  const pick2Songs = () => {
+    const song1Random = Math.floor(Math.random() * songs.length);
+    const song2Random = Math.floor(Math.random() * songs.length);
+
+    setSong1(songs[song1Random]);
+    setSong2(songs[song2Random]);
+  };
+
+  useEffect(() => {
+    pick2Songs();
+  }, [songs.length]);
+
   return (
     <div>
       {genres.length > 0 && (
@@ -94,11 +108,20 @@ const index = () => {
         }}>
         get songs
       </button>
-
-      {songs.length > 0 &&
-        songs.map((song) => {
-          return <SongCard song={song} />;
-        })}
+      <div className="songs-container">
+        {song1 && (
+          <div className="song">
+            <h2>Sing this Song:</h2>
+            <SongCard song={song1} />
+          </div>
+        )}
+        {song2 && (
+          <div className="song">
+            <h2>Over this Song's music:</h2>
+            <SongCard song={song2} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
