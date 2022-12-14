@@ -13,7 +13,12 @@ export const getGenres = async (token) => {
   return parsedGenres.body.genres;
 };
 
-export const getSongs = async (selectedGenres, token, setSongs) => {
+export const getSongs = async (
+  selectedGenres,
+  token,
+  setSongs,
+  setSelectedGenres = () => {}
+) => {
   if (selectedGenres.length === 0) {
     alert("Please selected at least 1 genre");
     return;
@@ -28,4 +33,5 @@ export const getSongs = async (selectedGenres, token, setSongs) => {
   });
   const parsedSongs = await songs.json();
   setSongs(parsedSongs);
+  setSelectedGenres([]);
 };

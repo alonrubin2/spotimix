@@ -7,9 +7,14 @@ import { genres } from "./../utils/genres";
 const index = () => {
   const [token, setToken] = useState("");
   const genresArray = genres;
-  const [selectedGenres, setSelectedCategories] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  console.log(
+    "🚀 ~ file: index.js:11 ~ index ~ selectedGenres",
+    selectedGenres
+  );
 
   const [songs, setSongs] = useState([]);
+  console.log("🚀 ~ file: index.js:17 ~ index ~ songs", songs);
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
 
@@ -28,10 +33,10 @@ const index = () => {
       const index = selectedGenres.indexOf(e.target.value);
       const modifiedSelectedCategories = [...selectedGenres];
       modifiedSelectedCategories.splice(index, 1);
-      setSelectedCategories(modifiedSelectedCategories);
+      setSelectedGenres(modifiedSelectedCategories);
       return;
     }
-    setSelectedCategories([...selectedGenres, e.target.value]);
+    setSelectedGenres([...selectedGenres, e.target.value]);
   };
 
   const pick2Songs = () => {
@@ -43,10 +48,10 @@ const index = () => {
 
   useEffect(() => {
     pick2Songs();
-  }, [songs.length]);
+  }, [songs]);
 
   return (
-    <div>
+    <div className="body">
       {genres.length > 0 && (
         <div className="select">
           <label className="select--label" htmlFor="genres">
@@ -71,7 +76,7 @@ const index = () => {
 
       <button
         onClick={() => {
-          getSongs(selectedGenres, token, setSongs);
+          getSongs(selectedGenres, token, setSongs, setSelectedGenres);
         }}>
         get songs
       </button>
