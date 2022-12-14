@@ -3,7 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/api/auth/getToken": "pages/api/auth/getToken.js",
-  "/api/songs/getSongs": "pages/api/songs/getSongs.js",
   "/": "pages/index.js",
   "/api/genres/getGenres": "pages/api/genres/getGenres.js"
 }

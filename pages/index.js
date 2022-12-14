@@ -61,7 +61,7 @@ const index = () => {
       },
     });
     const parsedSongs = await songs.json();
-    setSongs(parsedSongs.body.tracks);
+    setSongs(parsedSongs);
   };
 
   return (
