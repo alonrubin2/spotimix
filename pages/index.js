@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Spotify from "react-spotify-embed";
 import SongCard from "../components/SongCard";
 
 const index = () => {
@@ -8,6 +9,7 @@ const index = () => {
   const [songs, setSongs] = useState([]);
   const [song1, setSong1] = useState(null);
   const [song2, setSong2] = useState(null);
+  console.log("🚀 ~ file: index.js:11 ~ index ~ song2", song2);
 
   const getAuth = async () => {
     const auth = await fetch("/api/auth/getToken");
@@ -83,7 +85,7 @@ const index = () => {
       {genres.length > 0 && (
         <div className="select">
           <label className="select--label" htmlFor="genres">
-            Choose A Category for first song:
+            Choose Genres:
           </label>
           <select
             onChange={selectCategory}
@@ -108,6 +110,18 @@ const index = () => {
         }}>
         get songs
       </button>
+      <button
+        onClick={() => {
+          pick2Songs();
+        }}>
+        reshuffle
+      </button>
+      {/* <button
+        onClick={() => {
+          getSong2(song2);
+        }}>
+        get song 2
+      </button> */}
       <div className="songs-container">
         {song1 && (
           <div className="song">
@@ -121,6 +135,8 @@ const index = () => {
             <SongCard song={song2} />
           </div>
         )}
+
+        {song2 && <Spotify link={song2.external_urls.spotify} />}
       </div>
     </div>
   );
